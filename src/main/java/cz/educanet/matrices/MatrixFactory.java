@@ -1,5 +1,7 @@
 package cz.educanet.matrices;
 
+import java.util.Arrays;
+
 public class MatrixFactory implements IMatrixFactory {
 
     public static final IMatrixFactory instance = new MatrixFactory();
@@ -7,28 +9,28 @@ public class MatrixFactory implements IMatrixFactory {
     private MatrixFactory() {
     }
 
-    /**
-     * TODO: Implement
-     */
     @Override
     public IMatrix create(double[][] data) {
-        return null;
+        return new Matrix(data);
     }
 
-    /**
-     * TODO: Implement
-     */
     @Override
     public IMatrix createDiagonal(double[] diagonal) {
-        return null;
+        double[][] newMatrix = new double[diagonal.length][diagonal.length];
+        
+        for (int i = 0; i < diagonal.length; i++) {
+            newMatrix[i][i] = diagonal[i];
+        }
+        
+        return new Matrix(newMatrix);
     }
-
-    /**
-     * TODO: Implement
-     */
+    
     @Override
     public IMatrix createIdentity(int size) {
-        return null;
+        double[] forDiagonal = new double[size];
+        Arrays.fill(forDiagonal, 1);
+        
+        return createDiagonal(forDiagonal);
     }
 
     @Override

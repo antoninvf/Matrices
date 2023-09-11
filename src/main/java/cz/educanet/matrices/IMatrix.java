@@ -78,4 +78,6 @@ public interface IMatrix {
      */
     double get(int n, int m);
 
+    public String toString();
+
 }

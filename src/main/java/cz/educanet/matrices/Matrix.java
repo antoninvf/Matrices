@@ -8,68 +8,93 @@ public class Matrix implements IMatrix {
         this.rawArray = rawArray;
     }
 
-    /**
-     * TODO: Implement
-     */
     @Override
     public IMatrix times(IMatrix matrix) {
-        return null;
+        if (this.getColumns() != matrix.getRows())
+            throw new IllegalArgumentException();
+
+        double[][] newMatrix = new double[this.getRows()][matrix.getColumns()];
+
+        for (int i = 0; i < this.getRows(); i++) {
+            for (int j = 0; j < matrix.getColumns(); j++) {
+                for (int k = 0; k < matrix.getRows(); k++) {
+                    newMatrix[i][j] += this.get(i, k) * matrix.get(k, j);
+                }
+            }
+        }
+
+        return MatrixFactory.instance.create(newMatrix);
     }
 
-    /**
-     * TODO: Implement
-     */
     @Override
     public IMatrix times(Number scalar) {
-        return null;
+        double[][] newMatrix = this.rawArray;
+        newMatrix[0][0] = this.get(0, 0) * scalar.doubleValue();
+        return MatrixFactory.instance.create(newMatrix);
     }
 
-    /**
-     * TODO: Implement
-     */
     @Override
     public IMatrix add(IMatrix matrix) {
-        return null;
+        double[][] newMatrix = new double[this.getRows()][matrix.getColumns()];
+
+        if (this.getColumns() != matrix.getColumns() || this.getRows() != matrix.getRows())
+            throw new IllegalArgumentException();
+
+        for (int i = 0; i < this.getRows(); i++) {
+            for (int j = 0; j < this.getColumns(); j++) {
+                newMatrix[i][j] = this.get(i, j) + matrix.get(i, j);
+            }
+        }
+
+        return MatrixFactory.instance.create(newMatrix);
     }
 
-    /**
-     * TODO: Implement
-     */
     @Override
     public IMatrix transpose() {
-        return null;
+        double[][] newArray = new double[this.getColumns()][this.getRows()]; // flipped rows and columns count
+
+        for (int i = 0; i < this.getColumns(); i++) {
+            for (int j = 0; j < this.getRows(); j++) {
+                newArray[i][j] = this.get(j, i);
+            }
+        }
+
+        return MatrixFactory.instance.create(newArray);
     }
 
-    /**
-     * TODO: Implement
-     */
     @Override
     public double determinant() {
         return 0;
     }
 
-    /**
-     * TODO: Implement
-     */
     @Override
     public boolean isSquare() {
-        return false;
+        return this.getRows() == this.getColumns();
     }
 
-    /**
-     * TODO: Implement
-     */
     @Override
     public boolean isDiagonal() {
-        return false;
+        if (!this.isSquare()) return false;
+
+        for (int i = 0; i < this.getRows(); i++) {
+            for (int j = 0; j < this.getColumns(); j++) {
+                if (i != j && this.get(i, j) != 0) return false;
+            }
+        }
+
+        return true;
     }
 
-    /**
-     * TODO: Implement
-     */
     @Override
     public Number getTrace() {
-        return null;
+        if (!this.isSquare()) throw new IllegalArgumentException();
+
+        double trace = 0;
+        for (int i = 0; i < this.getRows(); i++) {
+            trace += this.get(i, i);
+        }
+
+        return trace;
     }
 
     @Override
